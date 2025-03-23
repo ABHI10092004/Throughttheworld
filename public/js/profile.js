@@ -60,7 +60,7 @@ const initializeProfilePage = () => {
 const loadUserProfile = async () => {
   try {
     // First try to get user data from local storage
-    const userData = getUserData();
+    const userData = getProfileUserData();
     
     if (userData) {
       // Update profile UI with user data from local storage
@@ -319,63 +319,30 @@ const setupFormSubmissions = () => {
 
 // Set up file uploads
 const setupFileUploads = () => {
-  const avatarInput = document.getElementById('avatar-upload');
-  const avatarImg = document.getElementById('profile-avatar-img');
-  const avatarLoading = document.getElementById('avatar-loading');
-  const avatarSuccess = document.getElementById('avatar-success');
-  
-  const coverInput = document.getElementById('cover-upload');
-  const coverElement = document.getElementById('profile-cover');
-  const coverLoading = document.getElementById('cover-loading');
-  const coverSuccess = document.getElementById('cover-success');
-  
-  let originalAvatarSrc = avatarImg.src;
-  let originalCoverStyle = coverElement.style.backgroundImage;
-  
   // Helper function to show success indicator temporarily
   function showSuccessIndicator(element) {
-    element.classList.add('show');
+    element.style.display = 'flex';
     setTimeout(() => {
-      element.classList.remove('show');
+      element.style.display = 'none';
     }, 3000);
   }
-  
-  // Avatar upload handling
-  avatarInput.addEventListener('change', async (e) => {
+
+  // Avatar upload
+  const avatarUpload = document.getElementById('avatar-upload');
+  avatarUpload.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     
-    // Validate file
-    if (!file.type.match('image.*')) {
-      alert('Please select an image file');
-      return;
-    }
+    // Show loading spinner
+    document.getElementById('avatar-loading').style.display = 'flex';
+    document.getElementById('avatar-success').style.display = 'none';
     
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size should not exceed 5MB');
-      return;
-    }
-    
-    // Store original image for rollback if needed
-    originalAvatarSrc = avatarImg.src;
-    
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      avatarImg.src = e.target.result;
-      avatarImg.classList.add('preview-fade');
-      setTimeout(() => avatarImg.classList.remove('preview-fade'), 300);
-    };
-    reader.readAsDataURL(file);
-    
-    // Upload to server
     try {
-      avatarLoading.style.display = 'flex';
-      
+      // Upload file
       const formData = new FormData();
-      formData.append('avatar', file);
+      formData.append('file', file);
       
-      const response = await fetch(`${API_URL}/users/upload-avatar`, {
+      const response = await fetch(`${API_URL}/uploads/avatar`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -384,78 +351,50 @@ const setupFileUploads = () => {
       });
       
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to upload avatar');
+        throw new Error('Failed to upload avatar');
       }
       
       const data = await response.json();
       
       // Update avatar in UI
-      avatarImg.src = data.fileUrl;
-      
-      // Update avatar in navbar
+      document.getElementById('profile-avatar-img').src = data.fileUrl;
       const navAvatar = document.getElementById('user-avatar');
-      if (navAvatar) {
-        navAvatar.src = data.fileUrl;
-      }
+      if (navAvatar) navAvatar.src = data.fileUrl;
       
       // Update user data in local storage
-      const userData = getUserData();
+      const userData = getProfileUserData();
       if (userData) {
         userData.avatar = data.fileUrl;
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('userData', JSON.stringify(userData));
       }
       
       // Show success indicator
-      showSuccessIndicator(avatarSuccess);
-      
+      showSuccessIndicator(document.getElementById('avatar-success'));
     } catch (error) {
-      console.error('Avatar upload error:', error);
-      alert(`Failed to upload avatar: ${error.message}`);
-      
-      // Revert to original image
-      avatarImg.src = originalAvatarSrc;
+      console.error('Error uploading avatar:', error);
+      alert('Failed to upload avatar. Please try again.');
     } finally {
-      avatarLoading.style.display = 'none';
+      // Hide loading spinner
+      document.getElementById('avatar-loading').style.display = 'none';
     }
   });
   
-  // Cover photo upload handling
-  coverInput.addEventListener('change', async (e) => {
+  // Cover image upload
+  const coverUpload = document.getElementById('cover-upload');
+  coverUpload.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     
-    // Validate file
-    if (!file.type.match('image.*')) {
-      alert('Please select an image file');
-      return;
-    }
+    // Show loading spinner
+    document.getElementById('cover-loading').style.display = 'flex';
+    document.getElementById('cover-success').style.display = 'none';
     
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size should not exceed 5MB');
-      return;
-    }
-    
-    // Store original cover for rollback if needed
-    originalCoverStyle = coverElement.style.backgroundImage;
-    
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      coverElement.style.backgroundImage = `url(${e.target.result})`;
-      coverElement.classList.add('preview-fade');
-      setTimeout(() => coverElement.classList.remove('preview-fade'), 300);
-    };
-    reader.readAsDataURL(file);
-    
-    // Upload to server
     try {
-      coverLoading.style.display = 'flex';
-      
+      // Upload file
       const formData = new FormData();
-      formData.append('cover', file);
+      formData.append('file', file);
       
-      const response = await fetch(`${API_URL}/users/upload-cover`, {
+      const response = await fetch(`${API_URL}/uploads/cover`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -464,33 +403,29 @@ const setupFileUploads = () => {
       });
       
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to upload cover photo');
+        throw new Error('Failed to upload cover image');
       }
       
       const data = await response.json();
       
       // Update cover image in UI
-      coverElement.style.backgroundImage = `url('${data.fileUrl}')`;
+      document.querySelector('.profile-cover').style.backgroundImage = `url('${data.fileUrl}')`;
       
       // Update user data in local storage
-      const userData = getUserData();
+      const userData = getProfileUserData();
       if (userData) {
         userData.coverImage = data.fileUrl;
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('userData', JSON.stringify(userData));
       }
       
       // Show success indicator
-      showSuccessIndicator(coverSuccess);
-      
+      showSuccessIndicator(document.getElementById('cover-success'));
     } catch (error) {
-      console.error('Cover upload error:', error);
-      alert(`Failed to upload cover photo: ${error.message}`);
-      
-      // Revert to original cover
-      coverElement.style.backgroundImage = originalCoverStyle;
+      console.error('Error uploading cover image:', error);
+      alert('Failed to upload cover image. Please try again.');
     } finally {
-      coverLoading.style.display = 'none';
+      // Hide loading spinner
+      document.getElementById('cover-loading').style.display = 'none';
     }
   });
 
@@ -973,7 +908,7 @@ const updateUserInfo = (userData) => {
   }
   
   // Update user data in local storage
-  localStorage.setItem('user', JSON.stringify(userData));
+  localStorage.setItem('userData', JSON.stringify(userData));
 };
 
 // Show alert message
@@ -999,7 +934,7 @@ const showAlert = (message, type = 'success') => {
 };
 
 // Get user data from local storage
-const getUserData = () => {
+const getProfileUserData = () => {
   const userData = localStorage.getItem('userData') || localStorage.getItem('user');
   if (userData) {
     try {

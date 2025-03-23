@@ -125,16 +125,32 @@ img {
   padding: 15px 20px;
 }
 
-.logo h1 {
-  font-size: 24px;
+.logo {
+  margin-right: 20px;
+}
+
+.logo a {
   display: flex;
   align-items: center;
-  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logo a:hover {
+  opacity: 0.8;
+}
+
+.logo h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
 }
 
 .logo i {
   color: var(--primary-color);
   margin-right: 10px;
+  font-size: 28px;
 }
 
 #navbar ul {
@@ -953,11 +969,206 @@ img {
   margin-top: 30px;
 }
 
-/* Auth State Handling */
+/* Auth display logic */
+.user-menu {
+  display: none;
+}
+
 body.logged-in .user-menu {
   display: block;
 }
 
 body.logged-in .auth-links {
   display: none;
+}
+
+/* Header & Navigation */
+header {
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+nav ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-left: 15px;
+  list-style: none;
+  position: relative;
+}
+
+nav ul li a {
+  padding: 8px 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: block;
+  border-radius: 4px;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  color: var(--primary-color);
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+nav ul li a.active {
+  color: var(--primary-color);
+  background-color: rgba(33, 150, 243, 0.1);
+  font-weight: 600;
+  position: relative;
+}
+
+nav ul li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 3px;
+}
+
+/* User Menu Styling */
+.user-menu {
+  position: relative;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+  object-fit: cover;
+}
+
+.user-profile i {
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  min-width: 180px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.user-menu:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu li {
+  margin: 0;
+}
+
+.dropdown-menu li a {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  color: var(--dark-color);
+}
+
+.dropdown-menu li a:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-menu li a i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+/* Auth Links Styling */
+.auth-links {
+  display: flex;
+  align-items: center;
+}
+
+.login-link, .register-link {
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-link {
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.login-link:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.register-link {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.register-link:hover {
+  background-color: #0b7dda;
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+  header .container {
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+  
+  .logo {
+    margin-bottom: 15px;
+  }
+  
+  nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  nav ul li {
+    margin: 5px;
+  }
+  
+  .auth-links {
+    margin-top: 10px;
+  }
 } 

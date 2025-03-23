@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nearby Travelers | Through The World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/nearby-travelers.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <a href="/index.html">
+          <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/blogs.html">Blogs</a></li>
+          <li><a href="/rooms.html">Travel Rooms</a></li>
+          <li><a href="/bookings.html">Bookings</a></li>
+          <li><a href="/nearby-travelers.html" class="active">Nearby Travelers</a></li>
+          <li class="auth-links">
+            <a href="/login.html" class="login-link">Login</a>
+            <a href="/register.html" class="register-link">Register</a>
+          </li>
+          <li class="user-menu">
+            <div class="user-profile">
+              <img src="/images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+              <span id="username">User</span>
+              <i class="fas fa-caret-down"></i>
+            </div>
+            <ul class="dropdown-menu">
+              <li><a href="/profile.html"><i class="fas fa-user"></i> Profile</a></li>
+              <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="travelers-header">
+    <div class="container">
+      <h2>Nearby Travelers</h2>
+      <p>Connect with travelers in your area or at your destination</p>
+    </div>
+  </section>
+
+  <section class="travelers-content">
+    <div class="container">
+      <div id="auth-message" class="auth-required" style="display: none;">
+        <div class="text-center" style="padding: 40px 0;">
+          <h3>Please login to connect with nearby travelers</h3>
+          <p style="margin: 20px 0;">You need to be logged in to view and connect with other travelers.</p>
+          <a href="/login.html?redirect=/nearby-travelers.html" class="btn btn-primary">Login Now</a>
+        </div>
+      </div>
+
+      <div id="travelers-main" class="user-only">
+        <div class="travelers-filters">
+          <div class="filter-group">
+            <label for="location-filter">Your Location</label>
+            <div class="location-input">
+              <input type="text" id="location-filter" placeholder="Enter your current location or destination">
+              <button id="use-my-location" class="btn btn-secondary btn-sm">
+                <i class="fas fa-map-marker-alt"></i> Use My Location
+              </button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label for="distance-filter">Distance (km)</label>
+            <input type="range" id="distance-filter" min="5" max="500" value="50" step="5">
+            <span id="distance-value">50 km</span>
+          </div>
+          <div class="filter-group">
+            <label for="interest-filter">Interests</label>
+            <select id="interest-filter" multiple>
+              <option value="adventure">Adventure</option>
+              <option value="culture">Culture & History</option>
+              <option value="food">Food & Cuisine</option>
+              <option value="nature">Nature & Outdoors</option>
+              <option value="photography">Photography</option>
+              <option value="backpacking">Backpacking</option>
+              <option value="luxury">Luxury Travel</option>
+              <option value="budget">Budget Travel</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="travel-date">Travel Dates</label>
+            <div class="date-inputs">
+              <input type="date" id="travel-date-start" placeholder="Start Date">
+              <span>to</span>
+              <input type="date" id="travel-date-end" placeholder="End Date">
+            </div>
+          </div>
+          <button id="search-travelers" class="btn btn-primary">Find Travelers</button>
+        </div>
+
+        <div class="travelers-results">
+          <div class="travelers-map" id="travelers-map">
+            <!-- Map will be loaded here -->
+            <div class="map-placeholder">
+              <i class="fas fa-map-marked-alt"></i>
+              <p>Map will display here after location is entered</p>
+            </div>
+          </div>
+          <div class="travelers-list" id="travelers-list">
+            <div class="loading-indicator" id="loading-indicator">
+              <div class="spinner"></div>
+              <p>Finding travelers near you...</p>
+            </div>
+            <!-- Travelers will be listed here -->
+          </div>
+        </div>
+        
+        <div class="create-group-section">
+          <h3>Create a Travel Group</h3>
+          <p>Invite travelers to join your adventure or plan a new trip together.</p>
+          <button id="create-group-btn" class="btn btn-primary">Create Group</button>
+        </div>
+        
+        <div class="popular-destinations">
+          <h3>Popular Meeting Points</h3>
+          <div class="destination-cards">
+            <div class="destination-card">
+              <div class="destination-image" style="background-image: url('https://source.unsplash.com/300x200/?newyork')">
+                <div class="traveler-count"><i class="fas fa-user"></i> 24</div>
+              </div>
+              <div class="destination-info">
+                <h4>New York City, USA</h4>
+                <p>Connect with 24 travelers planning to visit soon</p>
+                <button class="btn btn-secondary btn-sm">View Travelers</button>
+              </div>
+            </div>
+            <div class="destination-card">
+              <div class="destination-image" style="background-image: url('https://source.unsplash.com/300x200/?paris')">
+                <div class="traveler-count"><i class="fas fa-user"></i> 18</div>
+              </div>
+              <div class="destination-info">
+                <h4>Paris, France</h4>
+                <p>Connect with 18 travelers planning to visit soon</p>
+                <button class="btn btn-secondary btn-sm">View Travelers</button>
+              </div>
+            </div>
+            <div class="destination-card">
+              <div class="destination-image" style="background-image: url('https://source.unsplash.com/300x200/?tokyo')">
+                <div class="traveler-count"><i class="fas fa-user"></i> 15</div>
+              </div>
+              <div class="destination-info">
+                <h4>Tokyo, Japan</h4>
+                <p>Connect with 15 travelers planning to visit soon</p>
+                <button class="btn btn-secondary btn-sm">View Travelers</button>
+              </div>
+            </div>
+            <div class="destination-card">
+              <div class="destination-image" style="background-image: url('https://source.unsplash.com/300x200/?bali')">
+                <div class="traveler-count"><i class="fas fa-user"></i> 12</div>
+              </div>
+              <div class="destination-info">
+                <h4>Bali, Indonesia</h4>
+                <p>Connect with 12 travelers planning to visit soon</p>
+                <button class="btn btn-secondary btn-sm">View Travelers</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Traveler Connection Modal -->
+  <div class="modal" id="connect-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-body" id="connect-modal-content">
+        <!-- Will be filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Group Modal -->
+  <div class="modal" id="create-group-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-header">
+        <h3>Create a Travel Group</h3>
+      </div>
+      <div class="modal-body">
+        <form id="create-group-form">
+          <div class="form-group">
+            <label for="group-name">Group Name</label>
+            <input type="text" id="group-name" class="form-control" placeholder="Enter a name for your group" required>
+          </div>
+          <div class="form-group">
+            <label for="group-destination">Destination</label>
+            <input type="text" id="group-destination" class="form-control" placeholder="Where are you traveling to?" required>
+          </div>
+          <div class="form-group">
+            <label for="group-dates">Travel Dates</label>
+            <div class="date-inputs">
+              <input type="date" id="group-date-start" required>
+              <span>to</span>
+              <input type="date" id="group-date-end" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="group-description">Description</label>
+            <textarea id="group-description" class="form-control" rows="3" placeholder="Describe your travel plans and what kind of travelers you're looking for"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="group-interests">Interests (select all that apply)</label>
+            <select id="group-interests" multiple>
+              <option value="adventure">Adventure</option>
+              <option value="culture">Culture & History</option>
+              <option value="food">Food & Cuisine</option>
+              <option value="nature">Nature & Outdoors</option>
+              <option value="photography">Photography</option>
+              <option value="backpacking">Backpacking</option>
+              <option value="luxury">Luxury Travel</option>
+              <option value="budget">Budget Travel</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="group-privacy">Privacy Setting</label>
+            <select id="group-privacy" class="form-control">
+              <option value="public">Public - Anyone can join</option>
+              <option value="request">Request - Approval required to join</option>
+              <option value="invite">Invite Only - Only invited travelers can join</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Group</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer id="main-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h3><i class="fas fa-globe-americas"></i> Through The World</h3>
+          <p>Share your travel experiences with the world</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blogs.html">Blogs</a></li>
+            <li><a href="/rooms.html">Travel Rooms</a></li>
+            <li><a href="/bookings.html">Bookings</a></li>
+            <li><a href="/nearby-travelers.html">Nearby Travelers</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Connect With Us</h4>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Through The World. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/nearby-travelers.js"></script>
+</body>
+</html> 
