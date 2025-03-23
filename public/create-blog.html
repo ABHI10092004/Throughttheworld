@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog | Through The World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-blog.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blogs.html" class="active">Blogs</a></li>
+                    <li><a href="rooms.html">Travel Rooms</a></li>
+                    <li><a href="bookings.html">Bookings</a></li>
+                </ul>
+            </nav>
+            <div class="auth-links">
+                <a href="login.html" class="login-link">Login</a>
+                <a href="register.html" class="register-link">Register</a>
+            </div>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+                    <span id="username">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Create Blog Content -->
+    <div class="create-blog-page">
+        <div class="container">
+            <!-- Authentication Message (shown when not logged in) -->
+            <div class="auth-message" id="auth-message" style="display: none;">
+                <h3>Login Required</h3>
+                <p>Please <a href="login.html">login</a> or <a href="register.html">register</a> to create a blog post.</p>
+            </div>
+
+            <!-- Create Blog Form (shown when logged in) -->
+            <div class="create-blog-content" id="create-blog-content">
+                <div class="page-header">
+                    <h2>Create New Blog Post</h2>
+                    <p>Share your travel adventures with the world</p>
+                </div>
+
+                <form id="create-blog-form">
+                    <div class="form-group">
+                        <label for="blog-title">Blog Title</label>
+                        <input type="text" id="blog-title" name="title" class="form-control" placeholder="Enter a captivating title" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="blog-location">Location</label>
+                            <input type="text" id="blog-location" name="location" class="form-control" placeholder="Where did you travel to?" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-tags">Tags</label>
+                            <input type="text" id="blog-tags" name="tags" class="form-control" placeholder="Add tags separated by commas (e.g., beach, mountains, food)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blog-excerpt">Short Excerpt</label>
+                        <textarea id="blog-excerpt" name="excerpt" class="form-control" rows="2" placeholder="Write a brief summary of your blog (max 150 characters)" maxlength="150"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cover Image</label>
+                        <div class="cover-image-container">
+                            <div class="cover-image-preview" id="cover-image-preview">
+                                <i class="fas fa-image"></i>
+                                <span>No image selected</span>
+                            </div>
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btn-secondary" type="button">Choose Cover Image</button>
+                                <input type="file" id="cover-image" name="coverImage" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blog-content">Blog Content</label>
+                        <div class="editor-toolbar">
+                            <button type="button" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                            <button type="button" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                            <button type="button" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+                            <button type="button" data-command="insertHeading" title="Heading"><i class="fas fa-heading"></i></button>
+                            <button type="button" data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                            <button type="button" data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+                            <button type="button" data-command="insertImage" title="Insert Image"><i class="fas fa-image"></i></button>
+                            <input type="file" id="content-image-upload" style="display: none;" accept="image/*">
+                        </div>
+                        <div class="editor-content" id="blog-content" contenteditable="true"></div>
+                        <textarea id="blog-content-hidden" name="content" style="display: none;"></textarea>
+                        <div class="editor-statusbar">
+                            <span class="wordcount">0 words</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="save-draft-btn" class="btn btn-secondary">Save Draft</button>
+                        <button type="submit" id="publish-btn" class="btn btn-primary">Publish Blog</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal" id="image-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Insert Image</h3>
+            <div class="image-preview-container">
+                <div class="image-preview" id="modal-image-preview">
+                    <i class="fas fa-image"></i>
+                    <span>No image selected</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="image-alt">Image Description (Alt text)</label>
+                <input type="text" id="image-alt" class="form-control" placeholder="Describe this image">
+            </div>
+            <div class="form-group">
+                <label for="image-caption">Caption (optional)</label>
+                <input type="text" id="image-caption" class="form-control" placeholder="Add a caption for this image">
+            </div>
+            <div class="form-actions">
+                <button type="button" id="upload-new-image-btn" class="btn btn-secondary">Choose Image</button>
+                <button type="button" id="insert-image-btn" class="btn btn-primary">Insert Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2><i class="fas fa-globe-americas"></i> Through The World</h2>
+                    <p>Connect with travelers, share experiences, and plan your next adventure.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blogs.html">Travel Blogs</a></li>
+                        <li><a href="rooms.html">Travel Rooms</a></li>
+                        <li><a href="bookings.html">Bookings</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@throughtheworld.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Travel Street, World City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Through The World. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/create-blog.js"></script>
+    <script>
+        console.log("Document loaded. API_URL:", API_URL, "isLoggedIn available:", typeof isLoggedIn === 'function');
+    </script>
+</body>
+</html> 

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Through The World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="rooms.html">Travel Rooms</a></li>
+                    <li><a href="bookings.html">Bookings</a></li>
+                </ul>
+            </nav>
+            <div class="auth-links">
+                <a href="login.html" class="login-link">Login</a>
+                <a href="register.html" class="register-link">Register</a>
+            </div>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+                    <span id="username">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Page Content -->
+    <div class="profile-page">
+        <div class="container">
+            <!-- Authentication Message (shown when not logged in) -->
+            <div class="auth-message" id="auth-message">
+                <h3>Login Required</h3>
+                <p>Please <a href="login.html">login</a> or <a href="register.html">register</a> to view your profile.</p>
+            </div>
+
+            <!-- Profile Content (shown when logged in) -->
+            <div class="profile-content" id="profile-content" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-cover" id="profile-cover">
+                        <div class="upload-preview-container">
+                            <div class="upload-loading" id="cover-loading" style="display: none;">
+                                <div class="upload-spinner"></div>
+                            </div>
+                            <div class="upload-success" id="cover-success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="edit-cover-btn">
+                            <label for="cover-upload">
+                                <i class="fas fa-camera"></i>
+                                Change Cover
+                            </label>
+                            <input type="file" id="cover-upload" class="file-input-hidden" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-avatar">
+                            <div class="upload-preview-container">
+                                <img src="images/default-avatar.png" alt="Profile Avatar" id="profile-avatar-img">
+                                <div class="upload-loading" id="avatar-loading" style="display: none;">
+                                    <div class="upload-spinner"></div>
+                                </div>
+                                <div class="upload-success" id="avatar-success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <div class="edit-avatar-btn">
+                                <label for="avatar-upload">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" id="avatar-upload" class="file-input-hidden" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <h2 id="profile-name">Loading...</h2>
+                            <p id="profile-bio">Loading bio...</p>
+                            <div class="profile-stats">
+                                <div class="stat">
+                                    <span class="stat-value" id="blogs-count">0</span>
+                                    <span class="stat-label">Blogs</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="rooms-count">0</span>
+                                    <span class="stat-label">Rooms</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="bookings-count">0</span>
+                                    <span class="stat-label">Bookings</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" data-tab="account-info">Account Info</button>
+                        <button class="tab-btn" data-tab="my-blogs">My Blogs</button>
+                        <button class="tab-btn" data-tab="my-rooms">My Rooms</button>
+                        <button class="tab-btn" data-tab="my-bookings">My Bookings</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Account Info Tab -->
+                        <div class="tab-pane active" id="account-info">
+                            <div class="account-form">
+                                <h3>Edit Profile</h3>
+                                <form id="profile-form">
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="text" id="name" class="form-control" placeholder="Your full name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" class="form-control" placeholder="Your email" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bio">Bio</label>
+                                        <textarea id="bio" class="form-control" rows="3" placeholder="Tell us about yourself"></textarea>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="location">Location</label>
+                                            <input type="text" id="location" class="form-control" placeholder="City, Country">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="website">Website</label>
+                                            <input type="url" id="website" class="form-control" placeholder="https://yourwebsite.com">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Social Media</label>
+                                        <div class="social-inputs">
+                                            <div class="social-input">
+                                                <i class="fab fa-twitter"></i>
+                                                <input type="text" id="twitter" class="form-control" placeholder="Twitter username">
+                                            </div>
+                                            <div class="social-input">
+                                                <i class="fab fa-instagram"></i>
+                                                <input type="text" id="instagram" class="form-control" placeholder="Instagram username">
+                                            </div>
+                                            <div class="social-input">
+                                                <i class="fab fa-facebook"></i>
+                                                <input type="text" id="facebook" class="form-control" placeholder="Facebook username">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="password-form">
+                                <h3>Change Password</h3>
+                                <form id="password-form">
+                                    <div class="form-group">
+                                        <label for="current-password">Current Password</label>
+                                        <input type="password" id="current-password" class="form-control" placeholder="Current password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-password">New Password</label>
+                                        <input type="password" id="new-password" class="form-control" placeholder="New password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm-password">Confirm New Password</label>
+                                        <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password">
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">Update Password</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="danger-zone">
+                                <h3>Danger Zone</h3>
+                                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                                <button id="delete-account-btn" class="btn btn-danger">Delete Account</button>
+                            </div>
+                        </div>
+
+                        <!-- My Blogs Tab -->
+                        <div class="tab-pane" id="my-blogs">
+                            <div class="tab-header">
+                                <h3>My Travel Blogs</h3>
+                                <a href="create-blog.html" class="btn btn-primary">Create New Blog</a>
+                            </div>
+                            <div class="blogs-list" id="my-blogs-list">
+                                <div class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading your blogs...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- My Rooms Tab -->
+                        <div class="tab-pane" id="my-rooms">
+                            <div class="tab-header">
+                                <h3>My Travel Rooms</h3>
+                                <button id="create-room-btn" class="btn btn-primary">Create New Room</button>
+                            </div>
+                            <div class="rooms-list" id="my-rooms-list">
+                                <div class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading your rooms...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- My Bookings Tab -->
+                        <div class="tab-pane" id="my-bookings">
+                            <div class="tab-header">
+                                <h3>My Travel Bookings</h3>
+                                <a href="bookings.html" class="btn btn-primary">Book New Travel</a>
+                            </div>
+                            <div class="bookings-list" id="my-bookings-list">
+                                <div class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading your bookings...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2><i class="fas fa-globe-americas"></i> Through The World</h2>
+                    <p>Connect with travelers, share experiences, and plan your next adventure.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blogs.html">Travel Blogs</a></li>
+                        <li><a href="rooms.html">Travel Rooms</a></li>
+                        <li><a href="bookings.html">Bookings</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@throughtheworld.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Travel Street, World City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Through The World. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html> 

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room | Through The World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="rooms.html" class="active">Travel Rooms</a></li>
+                    <li><a href="bookings.html">Bookings</a></li>
+                </ul>
+            </nav>
+            <div class="auth-links">
+                <a href="login.html" class="login-link">Login</a>
+                <a href="register.html" class="register-link">Register</a>
+            </div>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+                    <span id="username">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Chat Page Content -->
+    <div class="chat-page">
+        <div class="container">
+            <!-- Loading Container -->
+            <div id="loading-container" class="loading-container">
+                <div class="spinner"></div>
+                <p>Loading chat room...</p>
+            </div>
+            
+            <!-- Error Container -->
+            <div id="error-container" class="error-container" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h3>Error</h3>
+                <p id="error-message">An error occurred while loading the chat room.</p>
+                <a href="rooms.html" class="btn btn-primary">Back to Rooms</a>
+            </div>
+            
+            <!-- Message Container -->
+            <div id="message-container" class="chat-container" style="display: none;">
+                <!-- Room Header with Info -->
+                <div class="room-header">
+                    <h2 id="room-name">Chat Room</h2>
+                    <div id="connection-status" class="status-connecting" title="Connecting to chat server...">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Connecting...</span>
+                    </div>
+                </div>
+
+                <!-- Main Chat Layout -->
+                <div class="chat-layout">
+                    <!-- Chat Messages Area -->
+                    <div class="chat-main">
+                        <div class="chat-messages">
+                            <ul id="message-list" class="message-list">
+                                <!-- Messages will be loaded here -->
+                            </ul>
+                        </div>
+                        <div class="chat-input">
+                            <form id="message-form">
+                                <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+                                
+                                <button type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Members List Sidebar -->
+                    <div class="chat-sidebar">
+                        <div class="sidebar-header">
+                            <h3>Room Members</h3>
+                        </div>
+                        <div class="members-container">
+                            <ul id="members-list" class="members-list">
+                                <!-- Members will be loaded here -->
+                            </ul>
+                        </div>
+                        <div class="sidebar-footer">
+                            <a href="rooms.html" class="btn btn-primary">
+                                <i class="fas fa-arrow-left"></i> Back to Rooms
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2><i class="fas fa-globe-americas"></i> Through The World</h2>
+                    <p>Connect with travelers, share experiences, and plan your next adventure.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blogs.html">Travel Blogs</a></li>
+                        <li><a href="rooms.html">Travel Rooms</a></li>
+                        <li><a href="bookings.html">Bookings</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@throughtheworld.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Travel Street, World City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Through The World. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html> 

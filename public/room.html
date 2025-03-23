@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat Room | Through The World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/room.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="rooms.html" class="active">Travel Rooms</a></li>
+                    <li><a href="bookings.html">Bookings</a></li>
+                </ul>
+            </nav>
+            <div class="auth-links">
+                <a href="login.html" class="login-link">Login</a>
+                <a href="register.html" class="register-link">Register</a>
+            </div>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+                    <span id="username">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Room Page Content -->
+    <div class="room-page">
+        <div class="container">
+            <!-- Loading Container -->
+            <div id="loading-container" class="loading-container">
+                <div class="spinner"></div>
+                <p>Loading room...</p>
+            </div>
+            
+            <!-- Error Container -->
+            <div id="error-container" class="error-container" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h3>Error</h3>
+                <p id="error-message">An error occurred while loading the room.</p>
+                <a href="rooms.html" class="btn btn-primary">Back to Rooms</a>
+            </div>
+            
+            <!-- Room Container -->
+            <div id="room-container" class="room-container" style="display: none;">
+                <!-- Room Header with Info -->
+                <div class="room-header">
+                    <div class="room-header-left">
+                        <h2 id="room-name">Room Name</h2>
+                        <p id="room-description">Room description will appear here</p>
+                    </div>
+                    <div class="room-header-right">
+                        <div class="room-details">
+                            <span id="room-destination"><i class="fas fa-map-marker-alt"></i> Destination</span>
+                            <span id="room-privacy"><i class="fas fa-lock"></i> Private</span>
+                            <span id="room-members-count"><i class="fas fa-users"></i> 0 members</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Room Layout -->
+                <div class="room-layout">
+                    <!-- Chat Area -->
+                    <div class="chat-area">
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Messages will be loaded here -->
+                            <div class="empty-chat">
+                                <i class="fas fa-comments"></i>
+                                <p>No messages yet. Start the conversation!</p>
+                            </div>
+                        </div>
+                        
+                        <!-- User typing indicator -->
+                        <div id="typing-indicator" class="typing-indicator" style="display: none;">
+                            <span id="typing-text">Someone is typing...</span>
+                            <span class="typing-dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </span>
+                        </div>
+                        
+                        <!-- Chat Input -->
+                        <div class="chat-input">
+                            <form id="message-form">
+                                <div class="input-group">
+                                    <button type="button" id="emoji-btn" class="emoji-btn">
+                                        <i class="far fa-smile"></i>
+                                    </button>
+                                    <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+                                    <label for="image-upload" class="image-upload-label">
+                                        <i class="far fa-image"></i>
+                                    </label>
+                                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                </div>
+                                <button type="submit" id="send-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="room-sidebar">
+                        <div class="sidebar-header">
+                            <h3>Room Members</h3>
+                        </div>
+                        
+                        <!-- Members List -->
+                        <div class="members-container">
+                            <ul id="members-list" class="members-list">
+                                <!-- Members will be loaded here -->
+                                <li class="member-item skeleton">
+                                    <div class="skeleton-avatar"></div>
+                                    <div class="skeleton-name"></div>
+                                </li>
+                                <li class="member-item skeleton">
+                                    <div class="skeleton-avatar"></div>
+                                    <div class="skeleton-name"></div>
+                                </li>
+                                <li class="member-item skeleton">
+                                    <div class="skeleton-avatar"></div>
+                                    <div class="skeleton-name"></div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Sidebar Footer -->
+                        <div class="sidebar-footer">
+                            <a href="rooms.html" class="btn btn-primary">
+                                <i class="fas fa-arrow-left"></i> Back to Rooms
+                            </a>
+                            
+                            <div class="admin-actions" id="admin-actions" style="display: none;">
+                                <hr />
+                                <h4>Admin Actions</h4>
+                                <button id="invite-user-btn" class="btn btn-success">
+                                    <i class="fas fa-user-plus"></i> Invite Users
+                                </button>
+                                <button id="edit-room-btn" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i> Edit Room
+                                </button>
+                                <button id="delete-room-btn" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Delete Room
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Invite Users Modal -->
+            <div id="invite-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Invite Users to Room</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-container">
+                            <input type="text" id="user-search" placeholder="Search for users...">
+                            <button id="search-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="search-results" class="search-results">
+                            <!-- Search results will appear here -->
+                        </div>
+                        <div id="selected-users" class="selected-users">
+                            <h4>Selected Users</h4>
+                            <div id="selected-users-list" class="selected-users-list">
+                                <!-- Selected users will appear here -->
+                                <p class="empty-selection">No users selected</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cancel-invite" class="btn btn-secondary">Cancel</button>
+                        <button id="confirm-invite" class="btn btn-primary">Invite Selected Users</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2><i class="fas fa-globe-americas"></i> Through The World</h2>
+                    <p>Connect with travelers, share experiences, and plan your next adventure.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blogs.html">Travel Blogs</a></li>
+                        <li><a href="rooms.html">Travel Rooms</a></li>
+                        <li><a href="bookings.html">Bookings</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@throughtheworld.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Travel Street, World City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Through The World. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/room.js"></script>
+</body>
+</html> 

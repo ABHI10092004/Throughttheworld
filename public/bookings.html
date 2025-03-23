@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Bookings | Through The World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <a href="index.html">
+          <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="blogs.html">Blogs</a></li>
+          <li><a href="rooms.html">Travel Rooms</a></li>
+          <li><a href="bookings.html" class="active">Bookings</a></li>
+          <li class="auth-links">
+            <a href="login.html" class="login-link">Login</a>
+            <a href="register.html" class="register-link">Register</a>
+          </li>
+          <li class="user-menu">
+            <div class="user-profile">
+              <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+              <span id="username">User</span>
+              <i class="fas fa-caret-down"></i>
+            </div>
+            <ul class="dropdown-menu">
+              <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+              <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="blogs-header">
+    <div class="container">
+      <h2>Travel Bookings</h2>
+      <p>Book flights, hotels, cars, and more for your next adventure</p>
+    </div>
+  </section>
+
+  <section class="bookings-section">
+    <div class="container">
+      <div id="auth-message" class="auth-required" style="display: none;">
+        <div class="text-center" style="padding: 40px 0;">
+          <h3>Please login to access your bookings</h3>
+          <p style="margin: 20px 0;">You need to be logged in to view and create bookings.</p>
+          <a href="/login.html?redirect=/bookings.html" class="btn btn-primary">Login Now</a>
+        </div>
+      </div>
+
+      <div id="bookings-content" class="user-only">
+        <div class="booking-types">
+          <div class="booking-type active" data-type="flight">
+            <i class="fas fa-plane"></i> Flights
+          </div>
+          <div class="booking-type" data-type="hotel">
+            <i class="fas fa-hotel"></i> Hotels
+          </div>
+          <div class="booking-type" data-type="car">
+            <i class="fas fa-car"></i> Cars
+          </div>
+          <div class="booking-type" data-type="bus">
+            <i class="fas fa-bus"></i> Buses
+          </div>
+          <div class="booking-type" data-type="train">
+            <i class="fas fa-train"></i> Trains
+          </div>
+        </div>
+
+        <div class="booking-form-container" id="booking-form-container">
+          <!-- Flight booking form (default) -->
+          <form id="flight-booking-form" class="booking-form">
+            <h3>Book Your Flight</h3>
+            <div class="form-row" style="display: flex; gap: 20px;">
+              <div class="form-group" style="flex: 1;">
+                <label for="departure-location">From</label>
+                <input type="text" id="departure-location" class="form-control" placeholder="City or Airport" required>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label for="arrival-location">To</label>
+                <input type="text" id="arrival-location" class="form-control" placeholder="City or Airport" required>
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 20px;">
+              <div class="form-group" style="flex: 1;">
+                <label for="departure-date">Departure Date</label>
+                <input type="date" id="departure-date" class="form-control" required>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label for="return-date">Return Date</label>
+                <input type="date" id="return-date" class="form-control">
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 20px;">
+              <div class="form-group" style="flex: 1;">
+                <label for="airline">Airline (Optional)</label>
+                <input type="text" id="airline" class="form-control" placeholder="Any airline">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label for="flight-class">Class</label>
+                <select id="flight-class" class="form-control">
+                  <option value="economy">Economy</option>
+                  <option value="premium-economy">Premium Economy</option>
+                  <option value="business">Business</option>
+                  <option value="first">First Class</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 20px;">
+              <div class="form-group" style="flex: 1;">
+                <label for="passengers">Passengers</label>
+                <input type="number" id="passengers" class="form-control" min="1" value="1" required>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label for="budget">Budget</label>
+                <input type="number" id="budget" class="form-control" placeholder="Maximum price (USD)" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Search Flights</button>
+          </form>
+
+          <!-- Other booking forms will be loaded dynamically -->
+        </div>
+
+        <div class="my-bookings">
+          <h3 style="margin: 40px 0 20px;">My Bookings</h3>
+          <div id="bookings-container">
+            <!-- This will be populated by JavaScript -->
+            <p class="text-center">Loading your bookings...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="main-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h3><i class="fas fa-globe-americas"></i> Through The World</h3>
+          <p>Share your travel experiences with the world</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blogs.html">Blogs</a></li>
+            <li><a href="/rooms.html">Travel Rooms</a></li>
+            <li><a href="/bookings.html">Bookings</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Connect With Us</h4>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Through The World. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/bookings.js"></script>
+</body>
+</html> 

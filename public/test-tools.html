@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Tools | Through The World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .test-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      color: #1e293b;
+      margin-top: 0;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #334155;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    button {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    button:hover {
+      background: #0284c7;
+    }
+    
+    .result {
+      margin-top: 20px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    
+    .error {
+      color: #ef4444;
+    }
+    
+    .success {
+      color: #10b981;
+    }
+    
+    .test-user-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .test-user-card p {
+      margin: 5px 0;
+    }
+    
+    .test-user-card .label {
+      font-weight: 500;
+      color: #64748b;
+      display: inline-block;
+      width: 100px;
+    }
+    
+    .test-user-card .value {
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <a href="index.html">
+          <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="create-room.html">Create Room</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <h1>Test Tools</h1>
+      <p>Use these tools for testing purposes only</p>
+      
+      <div class="test-section">
+        <h2>Create Test User</h2>
+        <form id="create-user-form">
+          <div class="form-group">
+            <label for="test-user-name">Name</label>
+            <input type="text" id="test-user-name" placeholder="Enter name (or leave blank for random)">
+          </div>
+          
+          <div class="form-group">
+            <label for="test-user-email">Email</label>
+            <input type="email" id="test-user-email" placeholder="Enter email (or leave blank for random)">
+          </div>
+          
+          <div class="form-group">
+            <label for="test-user-password">Password</label>
+            <input type="password" id="test-user-password" value="password123" placeholder="Password (default: password123)">
+          </div>
+          
+          <div class="form-group">
+            <label for="test-user-location">Location</label>
+            <input type="text" id="test-user-location" placeholder="Enter location (or leave blank for default)">
+          </div>
+          
+          <button type="submit">Create Test User</button>
+        </form>
+        
+        <div id="create-user-result" class="result" style="display: none;"></div>
+        
+        <div id="test-users" class="test-users">
+          <!-- Test users will appear here -->
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2>Test User Search</h2>
+        <div class="form-group">
+          <label for="search-query">Search Query</label>
+          <input type="text" id="search-query" placeholder="Enter name or email to search">
+        </div>
+        
+        <button id="search-button">Search Users</button>
+        <button id="search-button-test">Use Test Endpoint</button>
+        
+        <div id="search-result" class="result" style="display: none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Base API URL
+    const API_URL = 'http://localhost:5000/api';
+    
+    // DOM Elements
+    const createUserForm = document.getElementById('create-user-form');
+    const createUserResult = document.getElementById('create-user-result');
+    const testUsersContainer = document.getElementById('test-users');
+    const searchQueryInput = document.getElementById('search-query');
+    const searchButton = document.getElementById('search-button');
+    const searchButtonTest = document.getElementById('search-button-test');
+    const searchResult = document.getElementById('search-result');
+    
+    // Created test users store
+    let testUsers = [];
+    
+    // Create User Form Handler
+    createUserForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get form data
+      const name = document.getElementById('test-user-name').value;
+      const email = document.getElementById('test-user-email').value;
+      const password = document.getElementById('test-user-password').value || 'password123';
+      const location = document.getElementById('test-user-location').value;
+      
+      try {
+        // Show loading
+        createUserResult.style.display = 'block';
+        createUserResult.innerHTML = 'Creating test user...';
+        
+        // API request
+        const response = await fetch(`${API_URL}/users/create-test-user`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            location
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          createUserResult.innerHTML = `<span class="error">Error: ${data.msg}</span>`;
+          if (data.user) {
+            createUserResult.innerHTML += `\nUser already exists: ${JSON.stringify(data.user, null, 2)}`;
+          }
+          return;
+        }
+        
+        // Display success
+        createUserResult.innerHTML = `<span class="success">Success: ${data.msg}</span>\n${JSON.stringify(data.user, null, 2)}`;
+        
+        // Add to test users list
+        testUsers.push(data.user);
+        updateTestUsersList();
+        
+        // Clear form
+        document.getElementById('test-user-name').value = '';
+        document.getElementById('test-user-email').value = '';
+        document.getElementById('test-user-location').value = '';
+        
+      } catch (error) {
+        console.error('Error creating test user:', error);
+        createUserResult.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    });
+    
+    // Search Button Handler
+    searchButton.addEventListener('click', async () => {
+      const query = searchQueryInput.value.trim();
+      
+      if (!query || query.length < 2) {
+        searchResult.style.display = 'block';
+        searchResult.innerHTML = '<span class="error">Please enter at least 2 characters to search</span>';
+        return;
+      }
+      
+      try {
+        // Show loading
+        searchResult.style.display = 'block';
+        searchResult.innerHTML = 'Searching users...';
+        
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+          searchResult.innerHTML = '<span class="error">No auth token found. You need to log in first.</span>';
+          return;
+        }
+        
+        // API request
+        const response = await fetch(`${API_URL}/users/search?q=${encodeURIComponent(query)}`, {
+          method: 'GET',
+          headers: {
+            'x-auth-token': token,
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          searchResult.innerHTML = `<span class="error">Error: ${errorData.msg || response.statusText}</span>`;
+          return;
+        }
+        
+        const users = await response.json();
+        
+        // Display results
+        searchResult.innerHTML = `<span class="success">Found ${users.length} users:</span>\n${JSON.stringify(users, null, 2)}`;
+        
+      } catch (error) {
+        console.error('Error searching users:', error);
+        searchResult.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    });
+    
+    // Search Test Endpoint Button Handler
+    searchButtonTest.addEventListener('click', async () => {
+      const query = searchQueryInput.value.trim();
+      
+      if (!query || query.length < 2) {
+        searchResult.style.display = 'block';
+        searchResult.innerHTML = '<span class="error">Please enter at least 2 characters to search</span>';
+        return;
+      }
+      
+      try {
+        // Show loading
+        searchResult.style.display = 'block';
+        searchResult.innerHTML = 'Searching users (test endpoint)...';
+        
+        // API request (no auth required)
+        const response = await fetch(`${API_URL}/users/search-test?q=${encodeURIComponent(query)}`);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          searchResult.innerHTML = `<span class="error">Error: ${errorData.msg || response.statusText}</span>`;
+          return;
+        }
+        
+        const users = await response.json();
+        
+        // Display results
+        searchResult.innerHTML = `<span class="success">Found ${users.length} users (test endpoint):</span>\n${JSON.stringify(users, null, 2)}`;
+        
+      } catch (error) {
+        console.error('Error searching users (test endpoint):', error);
+        searchResult.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+      }
+    });
+    
+    // Update test users list
+    function updateTestUsersList() {
+      if (testUsers.length === 0) {
+        testUsersContainer.innerHTML = '<p>No test users created yet</p>';
+        return;
+      }
+      
+      let html = '<h3>Created Test Users</h3>';
+      
+      testUsers.forEach((user, index) => {
+        html += `
+          <div class="test-user-card">
+            <p><span class="label">Name:</span> <span class="value">${user.name}</span></p>
+            <p><span class="label">Email:</span> <span class="value">${user.email}</span></p>
+            <p><span class="label">User ID:</span> <span class="value">${user._id}</span></p>
+            <button onclick="useInSearch('${user.name}')">Search by Name</button>
+            <button onclick="useInSearch('${user.email}')">Search by Email</button>
+          </div>
+        `;
+      });
+      
+      testUsersContainer.innerHTML = html;
+    }
+    
+    // Use user in search
+    window.useInSearch = function(value) {
+      searchQueryInput.value = value;
+      searchQueryInput.focus();
+    }
+    
+    // Initialize
+    updateTestUsersList();
+  </script>
+</body>
+</html> 

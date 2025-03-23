@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Travel Room | Through The World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/create-room.css">
+</head>
+<body>
+  <header id="main-header">
+    <div class="container">
+      <div class="logo">
+        <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+      </div>
+      <nav id="navbar">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="blogs.html">Blogs</a></li>
+          <li><a href="rooms.html" class="active">Travel Rooms</a></li>
+          <li><a href="bookings.html">Bookings</a></li>
+        </ul>
+      </nav>
+      <div class="auth-links">
+        <a href="login.html" class="login-link">Login</a>
+        <a href="register.html" class="register-link">Register</a>
+      </div>
+      <div class="user-menu">
+        <div class="user-profile">
+          <img src="images/default-avatar.png" alt="Profile" class="avatar" id="user-avatar">
+          <span id="username">User</span>
+          <i class="fas fa-caret-down"></i>
+        </div>
+        <ul class="dropdown-menu">
+          <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h2>Create Travel Room</h2>
+      <p>Create a travel chat room, invite friends, and plan your next adventure together</p>
+    </div>
+  </section>
+
+  <section class="create-room-form">
+    <div class="container">
+      <div id="alert-container"></div>
+      
+      <div class="auth-message" id="auth-message" style="display: none;">
+        <h3>Login Required</h3>
+        <p>Please <a href="login.html">login</a> or <a href="register.html">register</a> to create travel rooms.</p>
+      </div>
+      
+      <div class="form-container" id="form-container">
+        <div class="form-steps">
+          <div class="step active" data-step="1">
+            <span class="step-number">1</span>
+            <span class="step-text">Room Details</span>
+          </div>
+          <div class="step" data-step="2">
+            <span class="step-number">2</span>
+            <span class="step-text">Invite Members</span>
+          </div>
+          <div class="step" data-step="3">
+            <span class="step-number">3</span>
+            <span class="step-text">Finish</span>
+          </div>
+        </div>
+        
+        <div class="step-content" id="step-content-1">
+          <h3>Room Details</h3>
+          <form id="room-details-form">
+            <div class="form-group">
+              <label for="room-name">Room Name*</label>
+              <input type="text" id="room-name" name="name" required placeholder="Enter a name for your travel room">
+            </div>
+            
+            <div class="form-group">
+              <label for="room-destination">Destination*</label>
+              <input type="text" id="room-destination" name="destination" required placeholder="Where is this room focused on?">
+            </div>
+            
+            <div class="form-group">
+              <label for="room-description">Description*</label>
+              <textarea id="room-description" name="description" required placeholder="Describe the purpose of this room"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="room-privacy">Privacy Settings</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="isPrivate" value="false" checked>
+                  <span>Public</span>
+                  <p class="option-description">Anyone can view and join this room</p>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="isPrivate" value="true">
+                  <span>Private</span>
+                  <p class="option-description">Only invited members can join this room</p>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-buttons">
+              <a href="rooms.html" class="btn btn-secondary">Cancel</a>
+              <button type="button" class="btn btn-primary" id="next-to-step-2">Next: Invite Members</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="step-content" id="step-content-2" style="display: none;">
+          <h3>Invite Members</h3>
+          
+          <div class="search-container">
+            <div class="form-group">
+              <label for="user-search">Search Users</label>
+              <div class="search-input-group">
+                <input type="text" id="user-search" placeholder="Search by name or email" value="test">
+                <button type="button" id="search-users-btn">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <p class="search-help">Enter a name or email to find users (minimum 2 characters)</p>
+              <button type="button" class="btn-test-search">Test Search</button>
+              <button type="button" class="btn-list-all">Show All Users</button>
+            </div>
+          </div>
+          
+          <div id="search-results" class="search-results">
+            <!-- Search results will appear here -->
+          </div>
+          
+          <div class="invited-members-container">
+            <h4>Invited Members <span id="invited-count">(0)</span></h4>
+            <div id="invited-members" class="invited-members">
+              <!-- Invited members will appear here -->
+              <div class="empty-state" id="no-invites-message">
+                <p>No members invited yet</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-buttons">
+            <button type="button" class="btn btn-secondary" id="back-to-step-1">Back</button>
+            <button type="button" class="btn btn-primary" id="next-to-step-3">Next: Create Room</button>
+          </div>
+        </div>
+        
+        <div class="step-content" id="step-content-3" style="display: none;">
+          <h3>Finish Creating Room</h3>
+          
+          <div class="room-summary">
+            <h4>Room Summary</h4>
+            <div id="room-summary-content">
+              <!-- Room summary will be displayed here -->
+            </div>
+          </div>
+          
+          <div class="form-buttons">
+            <button type="button" class="btn btn-secondary" id="back-to-step-2">Back</button>
+            <button type="button" class="btn btn-primary" id="create-room-btn">
+              <i class="fas fa-plus"></i> Create Room
+            </button>
+          </div>
+        </div>
+        
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+          <div class="spinner"></div>
+          <p>Creating your room...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="main-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h3><i class="fas fa-globe-americas"></i> Through The World</h3>
+          <p>Share your travel experiences with the world</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">Blogs</a></li>
+            <li><a href="rooms.html">Travel Rooms</a></li>
+            <li><a href="bookings.html">Bookings</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Connect With Us</h4>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Through The World. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/create-room.js"></script>
+</body>
+</html> 

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Test | Through The World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .test-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      color: #1e293b;
+      margin-top: 0;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    
+    button {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    
+    button:hover {
+      background: #0284c7;
+    }
+    
+    .result {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .error {
+      color: #ef4444;
+    }
+    
+    .success {
+      color: #10b981;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border-left-color: #0ea5e9;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+      display: none;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .user-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 15px;
+      background-color: #fff;
+    }
+    
+    .user-card h3 {
+      margin-top: 0;
+      margin-bottom: 5px;
+      color: #1e293b;
+    }
+    
+    .user-card p {
+      margin: 5px 0;
+      color: #64748b;
+    }
+    
+    .user-card .user-id {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <a href="index.html">
+          <h1><i class="fas fa-globe-americas"></i> Through The World</h1>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="create-room.html">Create Room</a></li>
+          <li><a href="test-tools.html">Test Tools</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <h1>Database Test</h1>
+      <p>Use this page to check database connectivity and user records</p>
+      
+      <div class="test-section">
+        <h2>MongoDB Connection</h2>
+        <button id="check-connection">Check MongoDB Connection</button>
+        <div id="connection-spinner" class="spinner"></div>
+        <div id="connection-result" class="result" style="display: none;"></div>
+      </div>
+      
+      <div class="test-section">
+        <h2>List All Users</h2>
+        <button id="list-users">List All Users</button>
+        <div id="users-spinner" class="spinner"></div>
+        <div id="users-count" style="margin-top: 10px; display: none;"></div>
+        <div id="users-list" class="user-list"></div>
+        <div id="users-result" class="result" style="display: none;"></div>
+      </div>
+      
+      <div class="test-section">
+        <h2>Search Users</h2>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+          <input type="text" id="search-query" placeholder="Enter name or email" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          <button id="search-users">Search</button>
+        </div>
+        <div id="search-spinner" class="spinner"></div>
+        <div id="search-count" style="margin-top: 10px; display: none;"></div>
+        <div id="search-list" class="user-list"></div>
+        <div id="search-result" class="result" style="display: none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Common variables
+    const API_URL = 'http://localhost:5000/api';
+    
+    // DOM Elements
+    const checkConnectionBtn = document.getElementById('check-connection');
+    const connectionSpinner = document.getElementById('connection-spinner');
+    const connectionResult = document.getElementById('connection-result');
+    
+    const listUsersBtn = document.getElementById('list-users');
+    const usersSpinner = document.getElementById('users-spinner');
+    const usersCount = document.getElementById('users-count');
+    const usersList = document.getElementById('users-list');
+    const usersResult = document.getElementById('users-result');
+    
+    const searchQueryInput = document.getElementById('search-query');
+    const searchUsersBtn = document.getElementById('search-users');
+    const searchSpinner = document.getElementById('search-spinner');
+    const searchCount = document.getElementById('search-count');
+    const searchList = document.getElementById('search-list');
+    const searchResult = document.getElementById('search-result');
+    
+    // Check MongoDB Connection
+    checkConnectionBtn.addEventListener('click', async () => {
+      try {
+        connectionSpinner.style.display = 'block';
+        connectionResult.style.display = 'none';
+        
+        // We'll use list/all to test the connection
+        const response = await fetch(`${API_URL}/users/list/all`);
+        const data = await response.json();
+        
+        connectionResult.innerHTML = `
+          <span class="success">MongoDB Connection Successful!</span>
+          <p>Server responded with status: ${response.status}</p>
+          <p>Users found: ${data.count}</p>
+          <p>Connection time: ${new Date().toLocaleTimeString()}</p>
+        `;
+        
+        connectionResult.style.display = 'block';
+      } catch (error) {
+        connectionResult.innerHTML = `
+          <span class="error">MongoDB Connection Failed!</span>
+          <p>Error: ${error.message}</p>
+          <p>Check server logs for more details</p>
+        `;
+        
+        connectionResult.style.display = 'block';
+      } finally {
+        connectionSpinner.style.display = 'none';
+      }
+    });
+    
+    // List All Users
+    listUsersBtn.addEventListener('click', async () => {
+      try {
+        usersSpinner.style.display = 'block';
+        usersCount.style.display = 'none';
+        usersList.innerHTML = '';
+        usersResult.style.display = 'none';
+        
+        const response = await fetch(`${API_URL}/users/list/all`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${data.msg || response.statusText}`);
+        }
+        
+        // Show count
+        usersCount.innerHTML = `<p>Found <strong>${data.count}</strong> users in database</p>`;
+        usersCount.style.display = 'block';
+        
+        // Show user cards
+        if (data.users && data.users.length > 0) {
+          data.users.forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+              <h3>${user.name}</h3>
+              <p>${user.email}</p>
+              <p class="user-id">ID: ${user._id}</p>
+              <button onclick="testSearchForUser('${user.name}')">Search for this user</button>
+            `;
+            usersList.appendChild(userCard);
+          });
+        } else {
+          usersList.innerHTML = '<p>No users found in database</p>';
+        }
+        
+        // Show raw data
+        usersResult.innerHTML = `Raw server response:\n${JSON.stringify(data, null, 2)}`;
+        usersResult.style.display = 'block';
+      } catch (error) {
+        usersResult.innerHTML = `
+          <span class="error">Error listing users!</span>
+          <p>Error: ${error.message}</p>
+        `;
+        
+        usersResult.style.display = 'block';
+      } finally {
+        usersSpinner.style.display = 'none';
+      }
+    });
+    
+    // Search Users
+    searchUsersBtn.addEventListener('click', () => {
+      const query = searchQueryInput.value.trim();
+      if (query.length < 2) {
+        alert('Please enter at least 2 characters to search');
+        return;
+      }
+      
+      searchUsers(query);
+    });
+    
+    searchQueryInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchUsersBtn.click();
+      }
+    });
+    
+    // Function to search users
+    async function searchUsers(query) {
+      try {
+        searchSpinner.style.display = 'block';
+        searchCount.style.display = 'none';
+        searchList.innerHTML = '';
+        searchResult.style.display = 'none';
+        
+        const response = await fetch(`${API_URL}/users/search-test?q=${encodeURIComponent(query)}`);
+        
+        // Get response as text first for debugging
+        const responseText = await response.text();
+        
+        let data;
+        try {
+          // Try to parse the response text as JSON
+          data = JSON.parse(responseText);
+        } catch (e) {
+          searchResult.innerHTML = `
+            <span class="error">Error parsing response!</span>
+            <p>Server returned non-JSON response:</p>
+            <pre>${responseText}</pre>
+          `;
+          searchResult.style.display = 'block';
+          return;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${data.msg || response.statusText}`);
+        }
+        
+        // Show count
+        searchCount.innerHTML = `<p>Found <strong>${data.length}</strong> users matching "<em>${query}</em>"</p>`;
+        searchCount.style.display = 'block';
+        
+        // Show user cards
+        if (data && data.length > 0) {
+          data.forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+              <h3>${user.name}</h3>
+              <p>${user.email}</p>
+              <p class="user-id">ID: ${user._id}</p>
+            `;
+            searchList.appendChild(userCard);
+          });
+        } else {
+          searchList.innerHTML = `<p>No users found matching "${query}"</p>`;
+        }
+        
+        // Show raw data
+        searchResult.innerHTML = `Raw server response:\n${JSON.stringify(data, null, 2)}`;
+        searchResult.style.display = 'block';
+      } catch (error) {
+        searchResult.innerHTML = `
+          <span class="error">Error searching users!</span>
+          <p>Error: ${error.message}</p>
+        `;
+        
+        searchResult.style.display = 'block';
+      } finally {
+        searchSpinner.style.display = 'none';
+      }
+    }
+    
+    // Function to test search for a specific user
+    window.testSearchForUser = function(name) {
+      searchQueryInput.value = name;
+      searchUsersBtn.click();
+    };
+  </script>
+</body>
+</html> 
